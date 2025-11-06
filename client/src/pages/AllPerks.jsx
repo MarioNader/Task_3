@@ -30,6 +30,18 @@ export default function AllPerks() {
 
 */
 
+  // useEffect Hook #1: Initial Data Loading
+  // This runs once when component mounts to load all perks
+  useEffect(() => {
+    loadAllPerks()
+  }, []) // Empty dependency array = run once on mount
+
+  // useEffect Hook #2: Auto-search on Input Change
+  // This runs whenever searchQuery or merchantFilter changes
+  useEffect(() => {
+    loadAllPerks()
+  }, [searchQuery, merchantFilter]) // Re-run when these values change
+
   
   useEffect(() => {
     // Extract all merchant names from perks array
@@ -133,11 +145,12 @@ export default function AllPerks() {
                 {' '}Search by Name
               </label>
               <input
-                type="text"
-                className="input"
-                placeholder="Enter perk name..."
-                
-              />
+  type="text"
+  className="input"
+  placeholder="Enter perk name..."
+  value={searchQuery}
+  onChange={(e) => setSearchQuery(e.target.value)}
+/>
               <p className="text-xs text-zinc-500 mt-1">
                 Auto-searches as you type, or press Enter / click Search
               </p>
@@ -150,10 +163,11 @@ export default function AllPerks() {
                 {' '}Filter by Merchant
               </label>
               <select
-                className="input"
-                
-              >
-                <option value="">All Merchants</option>
+  className="input"
+  value={merchantFilter}
+  onChange={(e) => setMerchantFilter(e.target.value)}
+>
+  <option value="">All Merchants</option>
                 
                 {uniqueMerchants.map(merchant => (
                   <option key={merchant} value={merchant}>
@@ -216,10 +230,11 @@ export default function AllPerks() {
         {perks.map(perk => (
           
           <Link
-            key={perk._id}
-           
-            className="card hover:shadow-lg transition-shadow cursor-pointer"
-          >
+          key={perk._id}
+          to={`/perks/${perk._id}/view`}
+          className="card hover:shadow-lg transition-shadow cursor-pointer"
+        >
+          
             {/* Perk Title */}
             <div className="font-semibold text-lg text-zinc-900 mb-2">
               {perk.title}
